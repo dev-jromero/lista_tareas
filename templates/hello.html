@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% import 'macros.html' as macros %}
+{% import 'bootstrap/wtf.html' as wtf %}
 
 {% block title %} 
     {{ super() }}
@@ -7,15 +8,35 @@
 {% endblock %}
 
 {% block content %}
-    {% if user_ip %}
-        <h1>Hello HackSpace, tu IP es {{ user_ip }}</h1>
-    {% else %}
-        <a href="{{ url_for('index') }}">Ir a inicio</a>
-    {% endif %}
+    <div class="container">
+        <div class="page-header">
+            {% if username %}
+                <h1 class="text-center">Bienvenido, {{ username | capitalize }}</h1>
+            {% endif %}
+            {% if user_ip %}
+                <h3>tu IP es {{ user_ip }}</h3>
+            {% else %}
+                <a href="{{ url_for('index') }}">Ir a inicio</a>
+            {% endif %}
+        </div>
+        <div class="container">
+            <div class="col-md-offset-4 ">
+                <div class="input-group">
+                    <form action="{{ url_for('hello') }}" method="POST">
+                        {{ wtf.quick_form(login_form) }}   
+                    </form>
+                </div>
+            </div>
+            <div class="row col-md-offset-1">
+                <ul>
+                    {% for todo in todos %}
+                        {{ macros.render_todo(todo) }}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        
 
-    <ul>
-        {% for todo in todos %}
-            {{ macros.render_todo(todo) }}
-        {% endfor %}
-    </ul>
+        
+    </div>
 {% endblock %}
