@@ -4,11 +4,9 @@ import unittest
 
 from app import create_app
 from app.forms import LoginForm
+from app.firestore_service import get_users, get_todos
 
 app = create_app()
-
-todos = ['Comprar Cafe', 'Enviar Solicitud de compra', 'Entrega video de producto']
-
 
 
 @app.cli.command()
@@ -33,25 +31,22 @@ def index():
 
     return response
 
-@app.route('/hello', methods=['GET', 'POST'])
+@app.route('/hello', methods=['GET'])
 def hello():
     user_ip = session.get('user_ip')
-    login_form = LoginForm()
     username = session.get('username')
     context = {
         'user_ip':user_ip,
-        'todos':todos,
-        'login_form': login_form,
+        'todos': get_todos(user_id=username),
         'username' : username
     }
 
-    if login_form.validate_on_submit():
-        username = login_form.username.data
-        session['username'] = username
+    users= get_users()
 
-        flash('Nombre se usuario registrado con éxito!')
-
-        return redirect(url_for('index'))
+    for user in users:
+        print(user.id)
+        print(user.to_dict()['password'])
+   
 
     return render_template('hello.html', **context)
 
