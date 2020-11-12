@@ -20,13 +20,14 @@
             {% endif %}
         </div>
         <div class="container">
-            <div class="col-md-offset-4 ">
-                
+            <div class="col-md-offset-2 ">
+                <h2>Crear una nueva tarea</h2>
+                {{ wtf.quick_form(todo_form) }}
             </div>
-            <div class="row col-md-offset-1">
-                <ul>
+            <div class="row col-md-offset-2">
+                <ul class="list-group">
                     {% for todo in todos %}
-                        {{ macros.render_todo(todo) }}
+                        {{ macros.render_todo(todo, delete_form) }}
                     {% endfor %}
                 </ul>
             </div>
